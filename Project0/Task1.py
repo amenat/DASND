@@ -26,3 +26,16 @@ callsT = list(zip(*calls))
 nums = set(textsT[0] + textsT[1] + callsT[0] + callsT[1])
 
 print(f"There are {len(nums)} different telephone numbers in the records.")
+
+'''
+Big-Oh analysis:
+
+Assuming each record is counted as 1 input. We have n = len(texts) + len(calls)
+
+zip operation in this case just transposes the list which is O(n) operation
+Concatenating lists is O(1) operation
+Making a set is O(n) operation
+
+Hence overall runtime of this solution is O(n)
+
+'''

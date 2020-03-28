@@ -58,6 +58,26 @@ for code in blr_dials:
     print(code)
 
 
+'''
+Big-Oh analysis:
+
+Part A:
+
+n = len(calls)
+
+Filtering out bangalore calls = list comprehension with filter = O(n)
+A for loop over all calls and update set = O(n)     Sidenote: blr_calls ⊆ calls
+
+sorting area codes in alphabetical order is a tricky one to define. Sorting is O(x . log x) operation
+But ideally number of area codes will never be close to n when n is big enough.
+Assuming number of area codes in world are of constant, this is irrelevant to BigOh analysis.
+
+Overalll runtime of this program is O(n)
+
+'''
+
+
+
 """
 Part B: What percentage of calls from fixed lines in Bangalore are made
 to fixed lines also in Bangalore? In other words, of all the calls made
@@ -74,3 +94,21 @@ blr_internal = [call for call in blr_calls if call[1][:5] == '(080)']
 blr_internal_ratio = len(blr_internal) / len(blr_calls) * 100
 
 print(f"{blr_internal_ratio:.2f} percent of calls from fixed lines in Bangalore are calls to other fixed lines in Bangalore.")
+
+
+
+'''
+Big-Oh analysis:
+
+Part B:
+
+Note: blr_calls ⊆ calls
+
+assuming n = len(blr_calls)
+
+list comprehension with filter is O(n)
+counting len for arrays is O(1) operation hence calculation of ratio is O(1)
+
+Overall runtime of this program is O(n)
+
+'''

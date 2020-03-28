@@ -36,3 +36,22 @@ for call in calls:
 max_caller = max(time_spent, key=lambda x: time_spent[x])
 
 print(f'{max_caller} spent the longest time, {time_spent[max_caller]} seconds, on the phone during September 2016.')
+
+
+'''
+Big-Oh analysis:
+
+Assuming n = len(calls)
+
+Transposing is O(n)
+List concatenation is O(1)
+Making a set is O(n)
+Initializing an empty dictionary is O(n)
+
+Updating dictionary for each call is O(n) operation.
+Finding maximum item from unsorted iterable is O(n) operation
+
+Hence overall runtime is O(n)
+
+
+'''
