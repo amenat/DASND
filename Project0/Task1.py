@@ -18,7 +18,6 @@ How many different telephone numbers are there in the records?
 Print a message:
 "There are <count> different telephone numbers in the records."
 """
-import time
 
 # transpose to get columns as single list
 textsT = list(zip(*texts))
