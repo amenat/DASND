@@ -1,0 +1,77 @@
+## Task 0:
+
+Since we have only used list indexing in this which is O(1); runtime of this whole program is O(1).
+
+
+## Task 1:
+
+Assuming each record is counted as 1 input. We have n = len(texts) + len(calls)
+
+zip operation in this case just transposes the list which is O(n) operation
+Concatenating lists is O(1) operation
+Making a set is O(n) operation
+
+Hence overall runtime of this solution is O(n)
+
+
+
+## Task 2:
+
+Assuming n = len(calls)
+
+Transposing is O(n)
+List concatenation is O(1)
+Making a set is O(n)
+Initializing an empty dictionary is O(n)
+
+Updating dictionary for each call is O(n) operation.
+Finding maximum item from unsorted iterable is O(n) operation
+
+Hence overall runtime is O(n)
+
+
+
+## Task 3
+
+### Part A:
+
+n = len(calls)
+
+Filtering out bangalore calls = list comprehension with filter = O(n)
+A for loop over all calls and update set = O(n)     Sidenote: blr_calls ⊆ calls
+
+sorting area codes in alphabetical order is a tricky one to define. Sorting is O(x . log x) operation
+But ideally number of area codes will never be close to n when n is big enough.
+Assuming number of area codes in world are of constant, this is irrelevant to BigOh analysis.
+
+Overalll runtime of this program is O(n)
+
+### Part B:
+
+Note: blr_calls ⊆ calls
+
+assuming n = len(blr_calls)
+
+list comprehension with filter is O(n)
+counting len for arrays is O(1) operation hence calculation of ratio is O(1)
+
+Overall runtime of this program is O(n)
+
+
+## Task 4:
+
+n = len(calls) + len(texts)
+
+transposing two lists = O(n)
+concatenating lists = O(1)
+Initializing 3 dicts with n sizes each = O(n)
+
+Counting incoming, outgoing calls and texts in a dict: O(n)
+
+Counting telemarketers: O(n) checks
+Sorting telemarketers: Not applicable; relatively constant. Assuming telemarkers are very small percent of all numbers.
+
+Overall runtime is O(n)
+
+
+P.S.: If len(telemarketers) --> n then runtime would be O(n log n) due to sorting. Detection is still O(n)

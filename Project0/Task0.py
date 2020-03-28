@@ -28,10 +28,3 @@ last_call = calls[-1]
 
 print(f"First record of texts, {first_txt[incoming]} texts {first_txt[answering]} at time {first_txt[ts]}")
 print(f"Last record of calls, {last_call[incoming]} calls {last_call[answering]} at time {last_call[ts]}, lasting {last_call[duration]} seconds")
-
-'''
-Big-Oh analysis:
-
-Since we have only used list indexing in this which is O(1); runtime of this whole program is O(1).
-
-'''

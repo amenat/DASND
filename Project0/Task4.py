@@ -50,7 +50,7 @@ for text in texts:
 telemarketers = set()
 
 for num in numbers:
-    if count_og[num] > 0 and count_ic[num] == 0 and sends_text[num] == 0:
+    if count_og[num] > 0 and count_ic[num] == 0 and sends_text[num] == 0 and num[:3] != '140':
         telemarketers.add(num)
 
 print("These numbers could be telemarketers: ")
@@ -60,23 +60,3 @@ telemarketers = sorted(list(telemarketers))
 for num in telemarketers:
     print(num)
 
-'''
-Big-Oh analysis:
-
-n = len(calls) + len(texts)
-
-transposing two lists = O(n)
-concatenating lists = O(1)
-Initializing 3 dicts with n sizes each = O(n)
-
-Counting incoming, outgoing calls and texts in a dict: O(n)
-
-Counting telemarketers: O(n) checks
-Sorting telemarketers: Not applicable; relatively constant. Assuming telemarkers are very small percent of all numbers.
-
-Overall runtime is O(n)
-
-
-P.S.: If len(telemarketers) ---> n then runtime would be O(n log n) due to sorting. Detection is still O(n)
-
-'''
