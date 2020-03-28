@@ -14,7 +14,16 @@ with open('calls.csv', 'r') as f:
 
 """
 TASK 1:
-How many different telephone numbers are there in the records? 
+How many different telephone numbers are there in the records?
 Print a message:
 "There are <count> different telephone numbers in the records."
 """
+import time
+
+# transpose to get columns as single list
+textsT = list(zip(*texts))
+callsT = list(zip(*calls))
+
+nums = set(textsT[0] + textsT[1] + callsT[0] + callsT[1])
+
+print(f"There are {len(nums)} different telephone numbers in the records.")
