@@ -20,3 +20,11 @@ Print messages:
 "Last record of calls, <incoming number> calls <answering number> at time <time>, lasting <during> seconds"
 """
 
+# column definition
+incoming, answering, ts, duration = range(4)
+
+first_txt = texts[0]
+last_call = calls[-1]
+
+print(f"First record of texts, {first_txt[incoming]} texts {first_txt[answering]} at time {first_txt[ts]}")
+print(f"Last record of calls, {last_call[incoming]} calls {last_call[answering]} at time {last_call[ts]}, lasting {last_call[duration]} seconds")
