@@ -25,38 +25,29 @@ Print a message:
 The list of numbers should be print out one per line in lexicographic order with no duplicates.
 """
 
+# Updated as per feedback from code review. This is a much cleaner solution.
+
 incoming, answering, ts, duration = range(4)
 
-callsT = list(zip(*calls))
-textsT = list(zip(*texts))
+nums_dict = {}
 
-numbers = set(callsT[incoming] + callsT[answering] + textsT[incoming] + textsT[answering])
-
-# initialize
-count_og = {num:0 for num in numbers}
-count_ic = {num:0 for num in numbers}
-sends_text = {num:0 for num in numbers}
-
-
-# I can convert a caller to a class but that will make searching very bad compared to doing just hashing in dict.
-
+# everyone who calls is a suspect
 for call in calls:
-    count_og[call[0]] += 1
-    count_ic[call[1]] += 1
+    nums_dict[call[incoming]] = True
 
+# everyone who recieves call is not a suspect.
+for call in calls:
+    nums_dict[call[answering]] = False
+
+# everyone who sends/recieves text is not a suspect.
 for text in texts:
-    sends_text[text[0]] += 1
+    nums_dict[text[incoming]] = False
+    nums_dict[text[answering]] = False
 
-telemarketers = set()
 
-for num in numbers:
-    if count_og[num] > 0 and count_ic[num] == 0 and sends_text[num] == 0 and num[:3] != '140':
-        telemarketers.add(num)
+telemarketers = [num for num in nums_dict.keys() if nums_dict[num]]
+telemarketers = sorted(telemarketers)
 
 print("These numbers could be telemarketers: ")
 
-telemarketers = sorted(list(telemarketers))
-
-for num in telemarketers:
-    print(num)
-
+print(*telemarketers, sep='\n')

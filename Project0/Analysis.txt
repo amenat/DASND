@@ -41,10 +41,11 @@ Filtering out bangalore calls = list comprehension with filter = O(n)
 A for loop over all calls and update set = O(n)     Sidenote: blr_calls ⊆ calls
 
 sorting area codes in alphabetical order is a tricky one to define. Sorting is O(x . log x) operation
-But ideally number of area codes will never be close to n when n is big enough.
-Assuming number of area codes in world are of constant, this is irrelevant to BigOh analysis.
 
-Overalll runtime of this program is O(n)
+But ideally number of area codes will never be close to n when n is big enough. Reminder that n is total number of calls. Number of area codes is going to be upper bounded by a constant; e.g. with 4 numbers maximum count of area codes is still 9999.
+
+Overalll runtime of this program is O(n) with very high probability; in absolute worst cases where number of area codes are close to number of calls, it will be O(n log n).
+
 
 ### Part B:
 
@@ -55,23 +56,16 @@ assuming n = len(blr_calls)
 list comprehension with filter is O(n)
 counting len for arrays is O(1) operation hence calculation of ratio is O(1)
 
+
 Overall runtime of this program is O(n)
 
 
 ## Task 4:
 
-n = len(calls) + len(texts)
+Looping over calls twice and texts once is all linear and hence O(n).
 
-transposing two lists = O(n)
-concatenating lists = O(1)
-Initializing 3 dicts with n sizes each = O(n)
+list comprehension with filter for creating list of telemarketers is O(n)
 
-Counting incoming, outgoing calls and texts in a dict: O(n)
+Sorting telemarketers: sorting is inherently O(x log x) problem; however, as numbers of telemarketers are going to much less than all possible numbers; we can say that runtime is still O(n) with very high probability.
 
-Counting telemarketers: O(n) checks
-Sorting telemarketers: Not applicable; relatively constant. Assuming telemarkers are very small percent of all numbers.
-
-Overall runtime is O(n)
-
-
-P.S.: If len(telemarketers) --> n then runtime would be O(n log n) due to sorting. Detection is still O(n)
+Overall worst case runtime when no. of telemarketers are nearly same as all numbers = O(n logn)

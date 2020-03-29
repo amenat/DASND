@@ -54,8 +54,7 @@ blr_dials = sorted(list(blr_dials))
 
 print("The numbers called by people in Bangalore have codes:")
 
-for code in blr_dials:
-    print(code)
+print(*blr_dials, sep='\n')
 
 
 

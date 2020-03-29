@@ -3,6 +3,8 @@ Read file into texts and calls.
 It's ok if you don't understand how to read files
 """
 import csv
+from collections import defaultdict
+
 with open('texts.csv', 'r') as f:
     reader = csv.reader(f)
     texts = list(reader)
@@ -27,7 +29,8 @@ callsT = list(zip(*calls))
 nums = set(callsT[incoming] + callsT[answering])
 
 # initialize dictionary with 0 duration for all phone numbers
-time_spent = {num:0 for num in nums}
+# time_spent = {num:0 for num in nums}  a much better way to initialize dictionary was suggested by code reviewer.
+time_spent = defaultdict(int)
 
 for call in calls:
     time_spent[call[incoming]] += int(call[duration])
