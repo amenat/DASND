@@ -27,6 +27,7 @@ def find_files(suffix: str, path: str) -> List[str]:
         # if item is a file and matches suffix, add it in list
         if os.path.isfile(item_path) and item_path.endswith(suffix):
             found_files.append(item_path)
+
         # if item is a directory, recursively search it for matching files.
         elif os.path.isdir(item_path):
             found_files.extend(find_files(suffix, item_path))
@@ -37,4 +38,4 @@ def find_files(suffix: str, path: str) -> List[str]:
 
 if __name__ == "__main__":
     c_files = find_files('.c', './testdir')
-    print(c_files)
+    print(*c_files, sep='\n')
