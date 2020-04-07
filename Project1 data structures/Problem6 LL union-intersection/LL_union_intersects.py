@@ -8,6 +8,9 @@ You will take in two linked lists and return a linked list that is composed of e
 We have provided a code template below, you are not required to use it:
 '''
 
+from typing import Any, Set
+
+
 class Node:
     def __init__(self, value):
         self.value = value
@@ -25,7 +28,7 @@ class LinkedList:
         cur_head = self.head
         out_string = ""
         while cur_head:
-            out_string += str(cur_head.value) + " -> "
+            out_string += str(cur_head) + " -> "
             cur_head = cur_head.next
         return out_string
 
@@ -51,13 +54,128 @@ class LinkedList:
 
         return size
 
-def union(llist_1, llist_2):
-    # Your Solution Here
-    pass
 
-def intersection(llist_1, llist_2):
-    # Your Solution Here
-    pass
+def is_present(llist: LinkedList, val: Any) -> bool:
+    ''' Checks if `val` is present in `llist`
+
+        Worst Case runtime: O(n) where n is length of `llist`
+    '''
+    assert val is not None, 'Presence of None should not be checked'
+
+    head = llist.head
+    while head:
+        if head.value == val:
+            return True
+        head = head.next
+    return False
+
+
+def union(llist_1: LinkedList, llist_2: LinkedList) -> LinkedList:
+    ''' Returns union of two LinkedLists. This solution assumes we are not allowed
+        to use any more complex datastructures than Linked lists.
+
+        Assuming n = len(llist_1) + len(llist_2)
+        Runtime complexity is O(n^2) as while inserting each value O(n) time is spent in checking if it's present in union and not duplicate.
+    '''
+    union_ll = LinkedList()
+
+    head = llist_1.head
+    while head:
+        # if present in list 2 and not duplicate -> append it to intersection
+        val = head.value
+        if not is_present(union_ll, val):
+            union_ll.append(val)
+        head = head.next
+
+    head = llist_2.head
+    while head:
+        # if present in list 2 and not duplicate -> append it to intersection
+        val = head.value
+        if not is_present(union_ll, val):
+            union_ll.append(val)
+        head = head.next
+
+    return union_ll
+
+
+def intersection(llist_1: LinkedList, llist_2: LinkedList) -> LinkedList:
+    ''' Returns intersection of two LinkedLists. This solution assumes we are not allowed
+        to use any more complex datastructures than Linked lists.
+
+        Assuming n = len(llist_1) + len(llist_2)
+        Runtime complexity O(n^2) as while inserting each value O(n) time is spent in checking if it's present in intersection and not duplicate.
+    '''
+    intersect_ll = LinkedList()
+
+    # since overall program runs in more than O(n) time, picking small linkedlist will provide a small optimization.
+    if llist_1.size() > llist_2.size():
+        head = llist_2.head
+        bigger_llist = llist_1
+    else:
+        head = llist_1.head
+        bigger_llist = llist_2
+
+    while head:
+        # if present in list 2 and not duplicate -> append it to intersection
+        val = head.value
+        if is_present(bigger_llist, val) and not is_present(intersect_ll, val):
+            intersect_ll.append(val)
+        head = head.next
+    return intersect_ll
+
+
+
+# Convert linked list to set.
+def LL_to_set(LList: LinkedList) -> Set:
+    ''' Returns set of all values in linkedlist
+    '''
+    lset = set()
+    head = LList.head
+    while head:
+        lset.add(head.value)
+        head = head.next
+    return lset
+
+
+def union_set(llist_1: LinkedList, llist_2: LinkedList) -> LinkedList:
+    ''' Returns union of two LinkedLists. This solution assumes we are not allowed
+        to use hashable data structures like sets or dictionaries.
+
+        Assuming n = len(llist_1) + len(llist_2)
+        Runtime complexity is O(n) as
+            1. Conversion to set is O(n)
+            2. Union set operator is O(n)
+    '''
+
+    result_set = LL_to_set(llist_1).union(LL_to_set(llist_2))
+
+    union_ll = LinkedList()
+    for value in result_set:
+        union_ll.append(value)
+
+    return union_ll
+
+def intersection_set(llist_1: LinkedList, llist_2: LinkedList) -> LinkedList:
+    ''' Returns union of two LinkedLists. This solution assumes we are not allowed
+        to use hashable data structures like sets or dictionaries.
+
+        Assuming n = len(llist_1) + len(llist_2)
+        Runtime complexity is O(n) as
+            1. Conversion to set is O(n)
+            2. Intersection set operator is O(n)
+
+            This is assuming ammortized average case for intersection. Worst case will be O(k*t) where k = len(llist_1) and t = len(llist_2).
+    '''
+
+    result_set = LL_to_set(llist_1).intersection(LL_to_set(llist_2))
+
+    union_ll = LinkedList()
+    for value in result_set:
+        union_ll.append(value)
+
+    return union_ll
+
+
 
 
 # Test case 1
@@ -74,8 +192,8 @@ for i in element_1:
 for i in element_2:
     linked_list_2.append(i)
 
-print (union(linked_list_1,linked_list_2))
-print (intersection(linked_list_1,linked_list_2))
+print('Union:', 'passed' if LL_to_set(union(linked_list_1,linked_list_2)) == set(element_1).union(set(element_2)) else 'failed')
+print('Intersection:', 'passed' if LL_to_set(intersection(linked_list_1,linked_list_2)) == set(element_1).intersection(set(element_2)) else 'failed')
 
 # Test case 2
 
@@ -91,5 +209,6 @@ for i in element_1:
 for i in element_2:
     linked_list_4.append(i)
 
-print (union(linked_list_3,linked_list_4))
-print (intersection(linked_list_3,linked_list_4))
+
+print('Union using sets:', 'passed' if LL_to_set(union_set(linked_list_3,linked_list_4)) == set(element_1).union(set(element_2)) else 'failed')
+print('Intersection using sets:', 'passed' if LL_to_set(intersection(linked_list_3,linked_list_4)) == set(element_1).intersection(set(element_2)) else 'failed')
