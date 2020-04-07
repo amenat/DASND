@@ -65,13 +65,13 @@ parent.add_group(child)
 
 child2 = Group('younger child')
 sub_child_2 = Group('Subchild 2')
-sub_child_2.add_user('Ankush')
+sub_child_2.add_user('DeepBlue')
 
 child2.add_group(sub_child_2)
 parent.add_group(child2)
 
 assert is_user_in_group('sub_child_user', parent) == True
-assert is_user_in_group('Ankush', child) == False
+assert is_user_in_group('DeepBlue', child) == False
 assert is_user_in_group('sub_child_user', child2) == False
-assert is_user_in_group('Ankush', parent) == True
-assert is_user_in_group('Ankush', child2) == True
+assert is_user_in_group('DeepBlue', parent) == True
+assert is_user_in_group('DeepBlue', child2) == True
