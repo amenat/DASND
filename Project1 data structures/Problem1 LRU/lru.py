@@ -21,24 +21,29 @@ For the current problem, you can consider the size of cache = 5.
 
 '''
 
-from collections import deque
-from typing import Any, Dict, Deque
+from collections import deque, OrderedDict
+from typing import Any
 
 class LRU_Cache(object):
 
     def __init__(self, capacity: int) -> None:
         self.capacity = capacity
-        self.queue: Deque[int] = deque(maxlen=capacity)
-        self.hmap: Dict[int, Any] = dict()
+        self.hmap: 'OrderedDict[int, Any]' = OrderedDict()
 
-    def get(self, key: int):
+    def get(self, key: int) -> Any:
         # Retrieve item from provided key. Return -1 if nonexistent.
-        pass
+        if key in self.hmap:
+            self.hmap.move_to_end(key, last=False)
+            return self.hmap[key]
+        return -1
 
-    def set(self, key: int, value: Any):
+    def set(self, key: int, value: Any) -> None:
         # Set the value if the key is not present in the cache. If the cache is at capacity remove the oldest item.
-        self.queue.append(key)
-        self.hmap[key] = value
+        if key not in self.hmap:
+            if len(self.hmap) >= self.capacity:
+                self.hmap.popitem()
+            self.hmap[key] = value
+            self.hmap.move_to_end(key, last=False)
 
 
 if __name__ == "__main__":
