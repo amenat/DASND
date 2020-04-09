@@ -82,9 +82,13 @@ def huffman_encoding(data: str):
     print(mapping)
 
     # encode data
+    char_data = list(data)
 
+    compressed = ''
+    for char in char_data:
+        compressed += mapping[char]
 
-    return 1, tree
+    return compressed, tree
 
 
 def huffman_decoding(data:str ,tree):
@@ -98,8 +102,8 @@ if __name__ == "__main__":
 
     encoded_data, tree = huffman_encoding(a_great_sentence)
 
-    # print ("The size of the encoded data is: {}\n".format(sys.getsizeof(int(encoded_data, base=2))))
-    # print ("The content of the encoded data is: {}\n".format(encoded_data))
+    print ("The size of the encoded data is: {}\n".format(sys.getsizeof(int(encoded_data, base=2))))
+    print ("The content of the encoded data is: {}\n".format(encoded_data))
 
     # # decoded_data = huffman_decoding(encoded_data, tree)
 
