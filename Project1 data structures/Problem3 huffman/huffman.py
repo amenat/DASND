@@ -79,7 +79,6 @@ def huffman_encoding(data: str):
 
     # treverse and and create mapping
     mapping = traverse_tree(tree)
-    print(mapping)
     # encode data
     char_data = list(data)
 
