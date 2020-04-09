@@ -1,10 +1,4 @@
 '''
-A Huffman code is a type of optimal prefix code that is used for compressing data. The Huffman encoding and decoding schema is also lossless, meaning that when compressing the data to make it smaller, there is no loss of information.
-
-The Huffman algorithm works by assigning codes that correspond to the relative frequency of each character for each character. The Huffman code can be of any length and does not require a prefix; therefore, this binary code can be visualized on a binary tree with each encoded character being stored on leafs.
-
-There are many types of pseudocode for this algorithm. At the basic core, it is comprised of building a Huffman tree, encoding the data, and, lastly, decoding the data.
-
 Here is one type of pseudocode for this coding schema:
 
     Take a string and determine the relevant frequencies of the characters.
@@ -18,11 +12,59 @@ You then will need to create encoding, decoding, and sizing schemas.
 '''
 
 import sys
+import heapq
+from collections import Counter
+from typing import Any
+from functools import total_ordering
 
-def huffman_encoding(data):
-    pass
 
-def huffman_decoding(data,tree):
+@total_ordering
+class Node:
+    def __init__(self, char: str, freq: int, is_internal: bool, right=None, left=None) -> None:
+        self.char = char
+        self.freq = freq
+        self.is_internal = is_internal
+        self.right = right
+        self.left = left
+
+    # dunder methods to ensure heapq works
+    def __eq__(self, other):
+        return self.freq == other.freq
+
+    def __lt__(self, other):
+        return self.freq < other.freq
+
+    # Create an internal node based on two nodes
+    def __add__(self, other):
+        total_freq = self.freq + other.freq
+        return Node('*', total_freq, True, right=self, left=other)
+
+    def __str__(self):
+        return f'({self.char} : {self.freq})'
+
+    def __repr__(self):
+        return f'({self.char} : {self.freq})'
+
+
+
+def huffman_encoding(data: str):
+    # convert data to
+    char_freq = Counter(data)
+    list_chars = [Node(char, freq, True) for char, freq in char_freq.items()]
+
+    # convert to min-heap
+    heapq.heapify(list_chars)
+
+    while len(list_chars) >= 3:
+        left_node = heapq.heappop(list_chars)
+        right_node = heapq.heappop(list_chars)
+        new_internal_node = left_node + right_node
+        heapq.heappush(list_chars, new_internal_node)
+
+    print(list_chars)
+
+
+def huffman_decoding(data:str ,tree):
     pass
 
 if __name__ == "__main__":
@@ -38,7 +80,7 @@ if __name__ == "__main__":
     print ("The size of the encoded data is: {}\n".format(sys.getsizeof(int(encoded_data, base=2))))
     print ("The content of the encoded data is: {}\n".format(encoded_data))
 
-    decoded_data = huffman_decoding(encoded_data, tree)
+    # decoded_data = huffman_decoding(encoded_data, tree)
 
     print ("The size of the decoded data is: {}\n".format(sys.getsizeof(decoded_data)))
     print ("The content of the encoded data is: {}\n".format(decoded_data))
