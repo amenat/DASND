@@ -80,7 +80,6 @@ def huffman_encoding(data: str):
     # treverse and and create mapping
     mapping = traverse_tree(tree)
     print(mapping)
-
     # encode data
     char_data = list(data)
 
@@ -91,8 +90,24 @@ def huffman_encoding(data: str):
     return compressed, tree
 
 
-def huffman_decoding(data:str ,tree):
-    pass
+
+def huffman_decoding(data:str, tree: Node):
+    string = ''
+    ptr = tree
+    for i in range(len(data)):
+        if data[i] == '0':
+            ptr = ptr.left
+        elif data[i] == '1':
+            ptr = ptr.right
+        if not ptr.is_internal:
+            string += ptr.char
+            ptr = tree
+            continue
+
+
+
+    return string
+        
 
 if __name__ == "__main__":
     a_great_sentence = "The bird is the word"
@@ -105,7 +120,7 @@ if __name__ == "__main__":
     print ("The size of the encoded data is: {}\n".format(sys.getsizeof(int(encoded_data, base=2))))
     print ("The content of the encoded data is: {}\n".format(encoded_data))
 
-    # # decoded_data = huffman_decoding(encoded_data, tree)
+    decoded_data = huffman_decoding(encoded_data, tree)
 
-    # print ("The size of the decoded data is: {}\n".format(sys.getsizeof(decoded_data)))
-    # print ("The content of the encoded data is: {}\n".format(decoded_data))
+    print ("The size of the decoded data is: {}\n".format(sys.getsizeof(decoded_data)))
+    print ("The content of the decoded data is: {}\n".format(decoded_data))
