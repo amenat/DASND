@@ -14,13 +14,13 @@ You then will need to create encoding, decoding, and sizing schemas.
 import sys
 import heapq
 from collections import Counter
-from typing import Any
+from typing import Any, Dict
 from functools import total_ordering
 
 
 @total_ordering
 class Node:
-    def __init__(self, char: str, freq: int, is_internal: bool, right=None, left=None) -> None:
+    def __init__(self, char: str, freq: int, is_internal=False, right=None, left=None) -> None:
         self.char = char
         self.freq = freq
         self.is_internal = is_internal
@@ -37,7 +37,7 @@ class Node:
     # Create an internal node based on two nodes
     def __add__(self, other):
         total_freq = self.freq + other.freq
-        return Node('*', total_freq, True, right=self, left=other)
+        return Node('*', total_freq, is_internal=True, right=self, left=other)
 
     def __str__(self):
         return f'({self.char} : {self.freq})'
@@ -46,12 +46,25 @@ class Node:
         return f'({self.char} : {self.freq})'
 
 
+def traverse_tree(tree: Node, binary='') -> Dict:
+    mapping = dict()
+    if not tree.is_internal:
+        mapping[tree.char] = binary
+    else:
+        if tree.left:
+            mapping.update(traverse_tree(tree.left, binary + '0'))
+        if tree.left:
+            mapping.update(traverse_tree(tree.right, binary + '1'))
+    return mapping
+
+
+
+
 
 def huffman_encoding(data: str):
     # convert data to
     char_freq = Counter(data)
-    print(char_freq)
-    list_chars = [Node(char, freq, True) for char, freq in char_freq.items()]
+    list_chars = [Node(char, freq, False) for char, freq in char_freq.items()]
 
     # convert to min-heap
     heapq.heapify(list_chars)
@@ -65,6 +78,11 @@ def huffman_encoding(data: str):
     tree = list_chars[0]
 
     # treverse and and create mapping
+    mapping = traverse_tree(tree)
+    print(mapping)
+
+    # encode data
+
 
     return 1, tree
 
