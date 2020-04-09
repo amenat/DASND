@@ -50,26 +50,29 @@ class Node:
 def huffman_encoding(data: str):
     # convert data to
     char_freq = Counter(data)
+    print(char_freq)
     list_chars = [Node(char, freq, True) for char, freq in char_freq.items()]
 
     # convert to min-heap
     heapq.heapify(list_chars)
 
-    while len(list_chars) >= 3:
+    while len(list_chars) >= 2:
         left_node = heapq.heappop(list_chars)
         right_node = heapq.heappop(list_chars)
         new_internal_node = left_node + right_node
         heapq.heappush(list_chars, new_internal_node)
 
-    print(list_chars)
+    tree = list_chars[0]
+
+    # treverse and and create mapping
+
+    return 1, tree
 
 
 def huffman_decoding(data:str ,tree):
     pass
 
 if __name__ == "__main__":
-    codes = {}
-
     a_great_sentence = "The bird is the word"
 
     print ("The size of the data is: {}\n".format(sys.getsizeof(a_great_sentence)))
@@ -77,10 +80,10 @@ if __name__ == "__main__":
 
     encoded_data, tree = huffman_encoding(a_great_sentence)
 
-    print ("The size of the encoded data is: {}\n".format(sys.getsizeof(int(encoded_data, base=2))))
-    print ("The content of the encoded data is: {}\n".format(encoded_data))
+    # print ("The size of the encoded data is: {}\n".format(sys.getsizeof(int(encoded_data, base=2))))
+    # print ("The content of the encoded data is: {}\n".format(encoded_data))
 
-    # decoded_data = huffman_decoding(encoded_data, tree)
+    # # decoded_data = huffman_decoding(encoded_data, tree)
 
-    print ("The size of the decoded data is: {}\n".format(sys.getsizeof(decoded_data)))
-    print ("The content of the encoded data is: {}\n".format(decoded_data))
+    # print ("The size of the decoded data is: {}\n".format(sys.getsizeof(decoded_data)))
+    # print ("The content of the encoded data is: {}\n".format(decoded_data))
