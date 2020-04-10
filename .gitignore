@@ -123,3 +123,5 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+Project1 data structures/Problem3 huffman/alice.dat
+Project1 data structures/Problem3 huffman/alice.tree
