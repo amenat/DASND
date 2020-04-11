@@ -22,7 +22,7 @@ def file_to_bitstring(filename: str) -> str:
 
 if __name__ == "__main__":
     # TODO: Fix trailing newline issue
-    with open('alice.txt', encoding='utf-8') as alice:
+    with open('alice.txt', 'r', encoding='utf-8') as alice:
         data = alice.read()
     bitstring, tree = huffman_encoding(data)
 
@@ -38,7 +38,7 @@ if __name__ == "__main__":
     to_decode = file_to_bitstring(compressed_file)
 
     # retrieve tree in file
-    with open('alice.tree', 'r+b') as f:
+    with open('alice.tree', 'rb') as f:
         tree = pickle.load(f)
 
     decoded = huffman_decoding(to_decode, tree)
