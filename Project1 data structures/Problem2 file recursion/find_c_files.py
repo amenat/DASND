@@ -39,3 +39,19 @@ def find_files(suffix: str, path: str) -> List[str]:
 if __name__ == "__main__":
     c_files = find_files('.c', './testdir')
     print(*c_files, sep='\n')
+
+    # search python files. There are none so this shouldn  print empty list
+    print('Python files: ', end='')
+    print(find_files('.py', './testdir'), sep='\n')
+
+    # Python file in current directory includes this file itself
+    print('Python in current folder: ', end='')
+    print(find_files('.py', './'))
+
+    # Specifying no suffix will return all the files
+    print('No suffix filter: ', end='')
+    print(find_files('', './testdir'))
+
+    # Find deeply nested file
+    print('Find deeply hideen haskell file: ', end='')
+    print(find_files('.hs', './testdeepdir'))
