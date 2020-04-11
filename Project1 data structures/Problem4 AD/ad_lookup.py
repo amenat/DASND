@@ -43,28 +43,28 @@ def is_user_in_group(user: str, group: Group) -> bool:
         return any(is_user_in_group(user, sub_grp) for sub_grp in group.get_groups())
 
 
+if __name__ == "__main__":
+    # test cases
+    parent = Group('parent')
+    child = Group('child')
+    sub_child = Group('subchild')
 
-# test cases
-parent = Group('parent')
-child = Group('child')
-sub_child = Group('subchild')
+    sub_child_user = 'sub_child_user'
+    sub_child.add_user(sub_child_user)
 
-sub_child_user = 'sub_child_user'
-sub_child.add_user(sub_child_user)
+    child.add_group(sub_child)
+    parent.add_group(child)
 
-child.add_group(sub_child)
-parent.add_group(child)
+    child2 = Group('younger child')
+    sub_child_2 = Group('Subchild 2')
+    sub_child_2.add_user('DeepBlue')
 
-child2 = Group('younger child')
-sub_child_2 = Group('Subchild 2')
-sub_child_2.add_user('DeepBlue')
+    child2.add_group(sub_child_2)
+    parent.add_group(child2)
 
-child2.add_group(sub_child_2)
-parent.add_group(child2)
-
-print(is_user_in_group('sub_child_user', parent))    # True - sub_child_exist in parent
-print(is_user_in_group('DeepBlue', child))           # False - Deepblue exist in another subtree
-print(is_user_in_group('sub_child_user', child2))    # False - sub_child_user exists in another subtree
-print(is_user_in_group('DeepBlue', parent))          # True - DeepBlue is present in parent tree
-print(is_user_in_group('DeepBlue', child2))          # True - DeepBlue is present in child2 subtree
-print(is_user_in_group('mcboatface', ['mcboatface', 'boaty'])) # Raise value error as input group is a list not Group
+    print(is_user_in_group('sub_child_user', parent))    # True - sub_child_exist in parent
+    print(is_user_in_group('DeepBlue', child))           # False - Deepblue exist in another subtree
+    print(is_user_in_group('sub_child_user', child2))    # False - sub_child_user exists in another subtree
+    print(is_user_in_group('DeepBlue', parent))          # True - DeepBlue is present in parent tree
+    print(is_user_in_group('DeepBlue', child2))          # True - DeepBlue is present in child2 subtree
+    print(is_user_in_group('mcboatface', ['mcboatface', 'boaty'])) # Raise value error as input group is a list not Group
