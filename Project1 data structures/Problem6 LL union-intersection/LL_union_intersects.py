@@ -12,19 +12,19 @@ from typing import Any, Set
 
 
 class Node:
-    def __init__(self, value):
+    def __init__(self, value: Any) -> None:
         self.value = value
         self.next = None
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return str(self.value)
 
 
 class LinkedList:
-    def __init__(self):
+    def __init__(self) -> None:
         self.head = None
 
-    def __str__(self):
+    def __str__(self) -> str:
         cur_head = self.head
         out_string = ""
         while cur_head:
@@ -33,7 +33,7 @@ class LinkedList:
         return out_string
 
 
-    def append(self, value):
+    def append(self, value: Any) -> None:
 
         if self.head is None:
             self.head = Node(value)
@@ -127,14 +127,23 @@ def intersection(llist_1: LinkedList, llist_2: LinkedList) -> LinkedList:
 
 # Convert linked list to set.
 def LL_to_set(LList: LinkedList) -> Set:
-    ''' Returns set of all values in linkedlist
-    '''
+    ''' Returns set of all values in linkedlist'''
+
     lset = set()
     head = LList.head
     while head:
         lset.add(head.value)
         head = head.next
     return lset
+
+
+def set_to_LL(list_set: set) -> LinkedList:
+    ''' Returns linkedlist of all items in set'''
+    ll = LinkedList()
+    for value in list_set:
+        ll.append(value)
+    return ll
+
 
 
 def union_set(llist_1: LinkedList, llist_2: LinkedList) -> LinkedList:
@@ -148,12 +157,7 @@ def union_set(llist_1: LinkedList, llist_2: LinkedList) -> LinkedList:
     '''
 
     result_set = LL_to_set(llist_1).union(LL_to_set(llist_2))
-
-    union_ll = LinkedList()
-    for value in result_set:
-        union_ll.append(value)
-
-    return union_ll
+    return set_to_LL(result_set)
 
 def intersection_set(llist_1: LinkedList, llist_2: LinkedList) -> LinkedList:
     ''' Returns union of two LinkedLists. This solution assumes we are not allowed
@@ -168,17 +172,12 @@ def intersection_set(llist_1: LinkedList, llist_2: LinkedList) -> LinkedList:
     '''
 
     result_set = LL_to_set(llist_1).intersection(LL_to_set(llist_2))
-
-    union_ll = LinkedList()
-    for value in result_set:
-        union_ll.append(value)
-
-    return union_ll
+    return set_to_LL(result_set)
 
 
 
 
-# Test case 1
+print(' -- Test case 1 - Using slower pure linkedlist implementation --')
 
 linked_list_1 = LinkedList()
 linked_list_2 = LinkedList()
@@ -192,23 +191,68 @@ for i in element_1:
 for i in element_2:
     linked_list_2.append(i)
 
+# better way to test is to use inbuilt set operations instead of visually comparing if output is correct
 print('Union:', 'passed' if LL_to_set(union(linked_list_1,linked_list_2)) == set(element_1).union(set(element_2)) else 'failed')
 print('Intersection:', 'passed' if LL_to_set(intersection(linked_list_1,linked_list_2)) == set(element_1).intersection(set(element_2)) else 'failed')
 
-# Test case 2
 
-linked_list_3 = LinkedList()
-linked_list_4 = LinkedList()
+print(' -- Test case 2 - using faster function utilizing set functions --')
+
+
+linked_list_1 = LinkedList()
+linked_list_2 = LinkedList()
 
 element_1 = [3,2,4,35,6,65,6,4,3,23]
 element_2 = [1,7,8,9,11,21,1]
 
 for i in element_1:
-    linked_list_3.append(i)
+    linked_list_1.append(i)
 
 for i in element_2:
-    linked_list_4.append(i)
+    linked_list_2.append(i)
 
 
-print('Union using sets:', 'passed' if LL_to_set(union_set(linked_list_3,linked_list_4)) == set(element_1).union(set(element_2)) else 'failed')
-print('Intersection using sets:', 'passed' if LL_to_set(intersection(linked_list_3,linked_list_4)) == set(element_1).intersection(set(element_2)) else 'failed')
+print('Union using sets:', 'passed' if LL_to_set(union_set(linked_list_1,linked_list_2)) == set(element_1).union(set(element_2)) else 'failed')
+print('Intersection using sets:', 'passed' if LL_to_set(intersection(linked_list_1,linked_list_2)) == set(element_1).intersection(set(element_2)) else 'failed')
+
+
+
+print(' -- Test case 3 - One linked list empty --')
+
+linked_list_1 = LinkedList()
+linked_list_2 = LinkedList()
+
+element_1 = [3,2,4,35,6,65,6,4,3,23]
+element_2 = []
+
+for i in element_1:
+    linked_list_1.append(i)
+
+for i in element_2:
+    linked_list_2.append(i)
+
+
+print('Union:', 'passed' if LL_to_set(union_set(linked_list_1,linked_list_2)) == set(element_1).union(set(element_2)) else 'failed')
+print('Intersection:', 'passed' if LL_to_set(intersection(linked_list_1,linked_list_2)) == set(element_1).intersection(set(element_2)) else 'failed')
+print('Union using sets:', 'passed' if LL_to_set(union_set(linked_list_1,linked_list_2)) == set(element_1).union(set(element_2)) else 'failed')
+print('Intersection using sets:', 'passed' if LL_to_set(intersection(linked_list_1,linked_list_2)) == set(element_1).intersection(set(element_2)) else 'failed')
+
+print(' -- Test case 4 - mixed types --')
+
+linked_list_1 = LinkedList()
+linked_list_2 = LinkedList()
+
+element_1 = [3,2,4,35,'aa',65,'b',4,3,23]
+element_2 = [5, 6, 'aa']
+
+for i in element_1:
+    linked_list_1.append(i)
+
+for i in element_2:
+    linked_list_2.append(i)
+
+
+print('Union:', 'passed' if LL_to_set(union_set(linked_list_1,linked_list_2)) == set(element_1).union(set(element_2)) else 'failed')
+print('Intersection:', 'passed' if LL_to_set(intersection(linked_list_1,linked_list_2)) == set(element_1).intersection(set(element_2)) else 'failed')
+print('Union using sets:', 'passed' if LL_to_set(union_set(linked_list_1,linked_list_2)) == set(element_1).union(set(element_2)) else 'failed')
+print('Intersection using sets:', 'passed' if LL_to_set(intersection(linked_list_1,linked_list_2)) == set(element_1).intersection(set(element_2)) else 'failed')
