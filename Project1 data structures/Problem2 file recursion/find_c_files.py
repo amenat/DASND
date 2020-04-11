@@ -18,6 +18,10 @@ def find_files(suffix: str, path: str) -> List[str]:
     Returns:
        a list of paths
     """
+    # check inputs
+    if not isinstance(suffix, str): raise ValueError('suffix must be a string')
+    if not os.path.isdir(path): raise FileNotFoundError(f'No such directory found: {path}')
+
     child_items = os.listdir(path)
     found_files = list()
 
@@ -55,3 +59,7 @@ if __name__ == "__main__":
     # Find deeply nested file
     print('Find deeply hideen haskell file: ', end='')
     print(find_files('.hs', './testdeepdir'))
+
+    # Directory doesn't exist
+    print('Check on directory that doesn\'t exist: ', end='')
+    print(find_files('.hs', './whereisthisdir'))  # this should raise FileNotFoundError

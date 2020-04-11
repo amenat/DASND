@@ -9,8 +9,7 @@ class LRU_Cache:
         self.hmap: 'OrderedDict[int, Any]' = OrderedDict()
 
     def get(self, key: int) -> int:
-        if not isinstance(key, int):
-            raise ValueError('Key must be integer')
+        if not isinstance(key, int): raise ValueError('Key must be integer')
 
         # Retrieve item from provided key. Return -1 if nonexistent.
         if key in self.hmap:
@@ -19,8 +18,7 @@ class LRU_Cache:
         return -1
 
     def set(self, key: int, value: Any) -> None:
-        if not isinstance(key, int):
-            raise ValueError('Key must be integer')
+        if not isinstance(key, int): raise ValueError('Key must be integer')
 
         # Set the value if the key is not present in the cache. If the cache is at capacity remove the oldest item.
         if key not in self.hmap:

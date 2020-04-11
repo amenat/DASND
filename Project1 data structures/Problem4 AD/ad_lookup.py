@@ -26,6 +26,10 @@ class Group(object):
 def is_user_in_group(user: str, group: Group) -> bool:
     ''' Return True if user is in the group, False otherwise.'''
 
+    #check inputs
+    if not isinstance(user, str): raise ValueError('User must be a string')
+    if not isinstance(group, Group): raise ValueError('group must be instance of `Group`')
+
     # search in users of current group
     if user in group.get_users():
         return True
@@ -63,3 +67,4 @@ print(is_user_in_group('DeepBlue', child))           # False - Deepblue exist in
 print(is_user_in_group('sub_child_user', child2))    # False - sub_child_user exists in another subtree
 print(is_user_in_group('DeepBlue', parent))          # True - DeepBlue is present in parent tree
 print(is_user_in_group('DeepBlue', child2))          # True - DeepBlue is present in child2 subtree
+print(is_user_in_group('mcboatface', ['mcboatface', 'boaty'])) # Raise value error as input group is a list not Group
