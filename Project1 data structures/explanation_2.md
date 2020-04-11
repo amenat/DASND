@@ -7,7 +7,7 @@ Pseudocode:
 ```create a list to store found files
 
     for all child items:
-        if file: check if it meets criteria, add to list of found files
+        if file: check if it meets criteria, add to list of found files (this is base case for recursion)
         if directory: recurse and merge result with parent call
 ```
 
