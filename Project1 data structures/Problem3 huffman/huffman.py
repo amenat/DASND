@@ -2,8 +2,9 @@ import sys
 import heapq
 import pickle
 from collections import Counter
-from typing import Any, Dict, Tuple, Union
+from typing import Any, Dict, Tuple
 from functools import total_ordering
+
 
 @total_ordering
 class Node:
@@ -37,12 +38,11 @@ def traverse_tree(tree: Node, binary: str='') -> Dict:
     else:
         if tree.left:
             mapping.update(traverse_tree(tree.left, binary + '0'))
-        if tree.left:
+        if tree.right:
             mapping.update(traverse_tree(tree.right, binary + '1'))
     return mapping
 
 
-# ref: https://stackoverflow.com/questions/16887493/write-a-binary-integer-or-string-to-a-file-in-python
 def bit_string_to_file(bitstring: str, filename: str) -> None:
     bit_strings = [bitstring[i:i + 8] for i in range(0, len(bitstring), 8)]
     byte_list = [int(b, 2) for b in bit_strings]
@@ -51,7 +51,6 @@ def bit_string_to_file(bitstring: str, filename: str) -> None:
         f.write(bytearray(byte_list))  # convert to bytearray before writing
 
 
-# debug this
 def file_to_bitstring(filename: str) -> str:
     with open(filename, 'rb') as f:
         content = f.read()
@@ -92,6 +91,7 @@ def huffman_encoding(data: str) -> Tuple[str, Node]:
 
     # treverse and and create mapping
     mapping = traverse_tree(tree)
+
     # encode data
     char_data = list(data)
 
@@ -187,23 +187,25 @@ if __name__ == "__main__":
     with open('alice.txt', 'r', encoding='utf-8') as alice:
         data = alice.read()
     bitstring, tree = huffman_encoding(data)
+    print(bitstring[-180:])
 
     compressed_file = 'alice.dat'
     bit_string_to_file(bitstring, compressed_file)
 
     # Store tree in file
-    with open('alice.tree', 'wb') as f:
+    treefile = 'alice.tree'
+
+    with open(treefile, 'wb') as f:
         pickle.dump(tree, f)
 
     # create bitstring to decode
     to_decode = file_to_bitstring(compressed_file)
+    print(to_decode[-180:])
 
     # retrieve tree in file
-    with open('alice.tree', 'rb') as f:
+    with open(treefile, 'rb') as f:
         tree = pickle.load(f)
 
     decoded = huffman_decoding(to_decode, tree)
 
-    print(len(bitstring))
-    print(len(to_decode))
     print(f'Does decoded data match orginal? : {data == decoded}')
