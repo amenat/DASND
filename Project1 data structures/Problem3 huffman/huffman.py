@@ -44,6 +44,7 @@ class Node:
 
 
 def map_tree_to_dict(tree: Node, binary: str='') -> Dict:
+    '''Takes heap/tree and returns character -> binary string mapping'''
     mapping = dict()
     if not tree.is_internal:
         mapping[tree.char] = binary
@@ -57,6 +58,7 @@ def map_tree_to_dict(tree: Node, binary: str='') -> Dict:
 
 # Adapted from: https://stackoverflow.com/questions/16887493/write-a-binary-integer-or-string-to-a-file-in-python
 def bit_string_to_file(bitstring: str, filename: str) -> None:
+    '''Takes bitstring as input and stores it in a file in binary form.'''
     bit_strings = [bitstring[i:i + 8] for i in range(0, len(bitstring), 8)]
     byte_list = [int(b, 2) for b in bit_strings]
 
@@ -65,6 +67,7 @@ def bit_string_to_file(bitstring: str, filename: str) -> None:
 
 
 def file_to_bitstring(filename: str) -> str:
+    '''Reads compressed binary file and returns bitstring'''
     with open(filename, 'rb') as f:
         content = f.read()
     bitstring = ''
