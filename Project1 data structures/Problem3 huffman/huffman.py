@@ -1,18 +1,6 @@
-'''
-Here is one type of pseudocode for this coding schema:
-
-    Take a string and determine the relevant frequencies of the characters.
-    Build and sort a list of tuples from lowest to highest frequencies.
-    Build the Huffman Tree by assigning a binary code to each letter, using shorter codes for the more frequent letters. (This is the heart of the Huffman algorithm.)
-    Trim the Huffman Tree (remove the frequencies from the previously built tree).
-    Encode the text into its compressed form.
-    Decode the text from its compressed form.
-
-You then will need to create encoding, decoding, and sizing schemas.
-'''
-
 import sys
 import heapq
+import pickle
 from collections import Counter
 from typing import Any, Dict
 from functools import total_ordering
@@ -58,6 +46,23 @@ def traverse_tree(tree: Node, binary='') -> Dict:
     return mapping
 
 
+# ref: https://stackoverflow.com/questions/16887493/write-a-binary-integer-or-string-to-a-file-in-python
+def bit_string_to_file(bitstring: str, filename: str) -> None:
+    bit_strings = [bitstring[i:i + 8] for i in range(0, len(bitstring), 8)]
+    byte_list = [int(b, 2) for b in bit_strings]
+
+    with open(filename, 'wb') as f:
+        f.write(bytearray(byte_list))  # convert to bytearray before writing
+
+
+# debug this
+def file_to_bitstring(filename: str) -> str:
+    with open(filename, 'rb') as f:
+        content = f.read()
+    bitstring = ''
+    for byte in content:
+        bitstring += '{0:08b}'.format(byte)
+    return bitstring
 
 
 
@@ -106,20 +111,87 @@ def huffman_decoding(data:str, tree: Node):
 
 
     return string
-        
+
 
 if __name__ == "__main__":
+    print('-- Test case #2: Regular string -- ')
+
     a_great_sentence = "The bird is the word"
 
-    print ("The size of the data is: {}\n".format(sys.getsizeof(a_great_sentence)))
-    print ("The content of the data is: {}\n".format(a_great_sentence))
+    print (f"The size of the data is: {sys.getsizeof(a_great_sentence))}")
+    print (f"The content of the data is: {a_great_sentence}")
 
     encoded_data, tree = huffman_encoding(a_great_sentence)
 
-    print ("The size of the encoded data is: {}\n".format(sys.getsizeof(int(encoded_data, base=2))))
-    print ("The content of the encoded data is: {}\n".format(encoded_data))
+    print (f"The size of the encoded data is: {sys.getsizeof(int(encoded_data, base=2))}")
+    print (f"The content of the encoded data is: {encoded_data}")
 
     decoded_data = huffman_decoding(encoded_data, tree)
 
-    print ("The size of the decoded data is: {}\n".format(sys.getsizeof(decoded_data)))
-    print ("The content of the decoded data is: {}\n".format(decoded_data))
+    print (f"The size of the decoded data is: {sys.getsizeof(decoded_data))}")
+    print (f"The content of the decoded data is: {decoded_data}")
+
+
+
+    print('-- Test case #2: Same character in string -- ')
+
+    a_great_sentence = "aaaaa"
+
+    print (f"The size of the data is: {sys.getsizeof(a_great_sentence))}")
+    print (f"The content of the data is: {a_great_sentence}")
+
+    encoded_data, tree = huffman_encoding(a_great_sentence)
+
+    print (f"The size of the encoded data is: {sys.getsizeof(int(encoded_data, base=2))}")
+    print (f"The content of the encoded data is: {encoded_data}")
+
+    decoded_data = huffman_decoding(encoded_data, tree)
+
+    print (f"The size of the decoded data is: {sys.getsizeof(decoded_data))}")
+    print (f"The content of the decoded data is: {decoded_data}")
+
+
+
+    print('-- Test case #3: Empty string -- ')
+
+    a_great_sentence = ""
+
+    print (f"The size of the data is: {sys.getsizeof(a_great_sentence))}")
+    print (f"The content of the data is: {a_great_sentence}")
+
+    encoded_data, tree = huffman_encoding(a_great_sentence)
+
+    print (f"The size of the encoded data is: {sys.getsizeof(int(encoded_data, base=2))}")
+    print (f"The content of the encoded data is: {encoded_data}")
+
+    decoded_data = huffman_decoding(encoded_data, tree)
+
+    print (f"The size of the decoded data is: {sys.getsizeof(decoded_data))}")
+    print (f"The content of the decoded data is: {decoded_data}")
+
+
+    print('-- Test case #4: Alice in WonderLand book -- ')
+
+    with open('alice.txt', 'r', encoding='utf-8') as alice:
+        data = alice.read()
+    bitstring, tree = huffman_encoding(data)
+
+    compressed_file = 'alice.dat'
+    bit_string_to_file(bitstring, compressed_file)
+
+    # Store tree in file
+    with open('alice.tree', 'wb') as f:
+        pickle.dump(tree, f)
+
+    # create bitstring to decode
+    to_decode = file_to_bitstring(compressed_file)
+
+    # retrieve tree in file
+    with open('alice.tree', 'rb') as f:
+        tree = pickle.load(f)
+
+    decoded = huffman_decoding(to_decode, tree)
+
+    print(len(bitstring))
+    print(len(to_decode))
+    print(f'Does decoded data match orginal? : {data == decoded}')
