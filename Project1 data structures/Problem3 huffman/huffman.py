@@ -2,9 +2,8 @@ import sys
 import heapq
 import pickle
 from collections import Counter
-from typing import Any, Dict
+from typing import Any, Dict, Tuple, Union
 from functools import total_ordering
-
 
 @total_ordering
 class Node:
@@ -25,16 +24,13 @@ class Node:
     # Create an internal node based on two nodes
     def __add__(self, other):
         total_freq = self.freq + other.freq
-        return Node('*', total_freq, is_internal=True, right=self, left=other)
-
-    def __str__(self):
-        return f'({self.char} : {self.freq})'
+        return Node('*', total_freq, is_internal=True, right=other, left=self)
 
     def __repr__(self):
         return f'({self.char} : {self.freq})'
 
 
-def traverse_tree(tree: Node, binary='') -> Dict:
+def traverse_tree(tree: Node, binary: str='') -> Dict:
     mapping = dict()
     if not tree.is_internal:
         mapping[tree.char] = binary
@@ -66,19 +62,31 @@ def file_to_bitstring(filename: str) -> str:
 
 
 
-def huffman_encoding(data: str):
-    # convert data to
+def huffman_encoding(data: str) -> Tuple[str, Node]:
+    # convert data to dictionary with character frequency
+    if not isinstance(data, str): raise ValueError('data should of type str')
+    if len(data) == 0: raise ValueError('data must not be empty')
+
     char_freq = Counter(data)
     list_chars = [Node(char, freq, False) for char, freq in char_freq.items()]
 
     # convert to min-heap
     heapq.heapify(list_chars)
 
-    while len(list_chars) >= 2:
+    # Special case of single string with same repeating character
+    # a small optimization; since doing this for all cases means adding 1 extra unnecessary bit to all
+    # characters and thus losing optimality of prefix codes.
+    if len(list_chars) == 1:
         left_node = heapq.heappop(list_chars)
-        right_node = heapq.heappop(list_chars)
+        right_node = Node('', 0, False)       # dummy node
         new_internal_node = left_node + right_node
         heapq.heappush(list_chars, new_internal_node)
+    else:
+        while len(list_chars) >= 2:
+            left_node = heapq.heappop(list_chars)
+            right_node = heapq.heappop(list_chars)
+            new_internal_node = left_node + right_node
+            heapq.heappush(list_chars, new_internal_node)
 
     tree = list_chars[0]
 
@@ -114,11 +122,11 @@ def huffman_decoding(data:str, tree: Node):
 
 
 if __name__ == "__main__":
-    print('-- Test case #2: Regular string -- ')
+    print('-- Test case #1: Regular string -- ')
 
     a_great_sentence = "The bird is the word"
 
-    print (f"The size of the data is: {sys.getsizeof(a_great_sentence))}")
+    print (f"The size of the data is: {sys.getsizeof(a_great_sentence)}")
     print (f"The content of the data is: {a_great_sentence}")
 
     encoded_data, tree = huffman_encoding(a_great_sentence)
@@ -128,16 +136,16 @@ if __name__ == "__main__":
 
     decoded_data = huffman_decoding(encoded_data, tree)
 
-    print (f"The size of the decoded data is: {sys.getsizeof(decoded_data))}")
+    print (f"The size of the decoded data is: {sys.getsizeof(decoded_data)}")
     print (f"The content of the decoded data is: {decoded_data}")
 
 
 
-    print('-- Test case #2: Same character in string -- ')
+    print('\n-- Test case #2: Same character in string -- ')
 
-    a_great_sentence = "aaaaa"
+    a_great_sentence = "aaaaaaa"
 
-    print (f"The size of the data is: {sys.getsizeof(a_great_sentence))}")
+    print (f"The size of the data is: {sys.getsizeof(a_great_sentence)}")
     print (f"The content of the data is: {a_great_sentence}")
 
     encoded_data, tree = huffman_encoding(a_great_sentence)
@@ -147,30 +155,34 @@ if __name__ == "__main__":
 
     decoded_data = huffman_decoding(encoded_data, tree)
 
-    print (f"The size of the decoded data is: {sys.getsizeof(decoded_data))}")
+    print (f"The size of the decoded data is: {sys.getsizeof(decoded_data)}")
     print (f"The content of the decoded data is: {decoded_data}")
 
 
 
-    print('-- Test case #3: Empty string -- ')
+    print('\n-- Test case #3: Empty string -- ')
 
     a_great_sentence = ""
 
-    print (f"The size of the data is: {sys.getsizeof(a_great_sentence))}")
+    print (f"The size of the data is: {sys.getsizeof(a_great_sentence)}")
     print (f"The content of the data is: {a_great_sentence}")
+    # this will throw ValueError as expected; we will continue running program to next error
+    try:
+        encoded_data, tree = huffman_encoding(a_great_sentence)
 
-    encoded_data, tree = huffman_encoding(a_great_sentence)
+        print (f"The size of the encoded data is: {sys.getsizeof(int(encoded_data, base=2))}")
+        print (f"The content of the encoded data is: {encoded_data}")
 
-    print (f"The size of the encoded data is: {sys.getsizeof(int(encoded_data, base=2))}")
-    print (f"The content of the encoded data is: {encoded_data}")
+        decoded_data = huffman_decoding(encoded_data, tree)
 
-    decoded_data = huffman_decoding(encoded_data, tree)
+        print (f"The size of the decoded data is: {sys.getsizeof(decoded_data)}")
+        print (f"The content of the decoded data is: {decoded_data}")
+    except ValueError as v:
+        print(f'Expected Exception caught: {v}')
+        pass
 
-    print (f"The size of the decoded data is: {sys.getsizeof(decoded_data))}")
-    print (f"The content of the decoded data is: {decoded_data}")
 
-
-    print('-- Test case #4: Alice in WonderLand book -- ')
+    print('\n-- Test case #4: Alice in WonderLand book -- ')
 
     with open('alice.txt', 'r', encoding='utf-8') as alice:
         data = alice.read()
