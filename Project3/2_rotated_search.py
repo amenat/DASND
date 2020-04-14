@@ -17,6 +17,9 @@ Here is some boilerplate code and test cases to start with:
 
 from typing import List
 
+def map_idx(idx, pivot, length):
+    return (idx - pivot) % length - 1
+
 def rotated_array_search(input_list: List[int] , number: int) -> int:
     """
     Find the index by searching in a rotated sorted array
@@ -26,12 +29,40 @@ def rotated_array_search(input_list: List[int] , number: int) -> int:
     Returns:
        int: Index or -1
     """
-    # find pivot first
+    # find smallest int using binary search
+    lo = 0
+    hi = len(input_list) - 1
+    pivot = 0
+    while hi >= lo:
+        mid = (lo + hi) // 2
+        if (input_list[mid] < input_list[mid+1]) and (input_list[mid] < input_list[mid-1]):
+            pivot = mid
+            break
+        elif input_list[0] > input_list[mid]:
+            hi = mid - 1
+        else:
+            lo = mid + 1
 
+    # find item index using binary search
+    print(input_list)
+    print(pivot)
+    lo = 0
+    hi = len(input_list) -1
+    length = len(input_list)
+    while hi >= lo:
+        mid = (lo + hi) // 2
+        act_mid = map_idx(mid, pivot, length)
 
-    # calculate index based on pivot
+        print(mid, act_mid, input_list[act_mid])
+        if input_list[act_mid] == number:   #check instead at + pivot point
+            return act_mid
+        elif number > input_list[act_mid]:
+            lo = mid + 1
+        else:
+            hi = mid - 1
 
     return -1
+
 
 def linear_search(input_list, number):
     for index, element in enumerate(input_list):
