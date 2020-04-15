@@ -9,6 +9,7 @@ The expected answer would be [531, 42]. Another expected answer can be [542, 31]
 
 Here is some boilerplate code and test cases to start with:
 '''
+import heapq
 from typing import List, Tuple
 
 def rearrange_digits(input_list: List[int]) -> Tuple[int, int]:
@@ -20,10 +21,24 @@ def rearrange_digits(input_list: List[int]) -> Tuple[int, int]:
     Returns:
        (int),(int): Two maximum sums
     """
-    pass
+    # heapify input list
+    heapq.heapify(input_list)
+    first, second = '', ''
+    while len(input_list) >= 2:
+        first = str(heapq.heappop(input_list)) + first
+        second = str(heapq.heappop(input_list)) + second
+
+    if len(input_list) > 0:
+        first = str(heapq.heappop(input_list)) + first
+
+    return int(first), int(second)
+
+
+
 
 def test_function(test_case: List[List[int]]) -> None:
     output = rearrange_digits(test_case[0])
+    print(output)
     solution = test_case[1]
     if sum(output) == sum(solution):
         print("Pass")
@@ -32,3 +47,4 @@ def test_function(test_case: List[List[int]]) -> None:
 
 test_function([[1, 2, 3, 4, 5], [542, 31]])
 test_case = [[4, 6, 2, 5, 9, 8], [964, 852]]
+test_function(test_case)
