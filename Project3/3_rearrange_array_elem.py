@@ -23,13 +23,15 @@ def rearrange_digits(input_list: List[int]) -> Tuple[int, int]:
     """
     # heapify input list
     heapq.heapify(input_list)
-    first, second = '', ''
+    first = second = 0
+    power = 0
     while len(input_list) >= 2:
-        first = str(heapq.heappop(input_list)) + first
-        second = str(heapq.heappop(input_list)) + second
+        first += heapq.heappop(input_list) * 10 ** power
+        second += heapq.heappop(input_list) * 10 ** power
+        power += 1
 
     if len(input_list) > 0:
-        first = str(heapq.heappop(input_list)) + first
+        first += heapq.heappop(input_list) * 10 ** power
 
     return int(first), int(second)
 
