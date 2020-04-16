@@ -1,20 +1,3 @@
-'''Search in a Rotated Sorted Array
-
-You are given a sorted array which is rotated at some random pivot point.
-
-Example: [0,1,2,4,5,6,7] might become [4,5,6,7,0,1,2]
-
-You are given a target value to search. If found in the array return its index, otherwise return -1.
-
-You can assume there are no duplicates in the array and your algorithm's runtime complexity must be in the order of O(log n).
-
-Example:
-
-Input: nums = [4,5,6,7,0,1,2], target = 0, Output: 4
-
-Here is some boilerplate code and test cases to start with:
-'''
-
 from random import randint
 from typing import List
 
@@ -40,21 +23,18 @@ def rotated_array_search(input_list: List[int], number: int) -> int:
     hi = length - 1
     pivot = 0
 
-    # TODO: handle pivot at end
     while hi >= lo:
         mid = (lo + hi) // 2
-        try:
-            nxt = (mid + 1) % length
-            if (input_list[mid] < input_list[nxt]) and (input_list[mid] < input_list[mid-1]):
-                pivot = mid
-                break
-            elif input_list[0] > input_list[mid]:
-                hi = mid - 1
-            else:
-                lo = mid + 1
-        except IndexError:
-            pivot = 0
+        nxt = (mid + 1) % length
+        prev = (mid - 1) % length
+        if (input_list[mid] < input_list[nxt]) and (input_list[mid] < input_list[prev]):
+            pivot = mid
             break
+        elif input_list[0] > input_list[mid]:
+            hi = mid - 1
+        else:
+            lo = mid + 1
+
 
     # find item index using binary search
     if number >= input_list[0] and pivot != 0:
@@ -106,8 +86,8 @@ test_function([[2, 3, 4, 5, 6, 1], 1])  # only first item rotated
 
 def test_case_gen(samples: int=100) -> bool:
     for _ in range(samples):
-        size = randint(10, 20)
-        arr = [randint(0, 100) for _ in range(size)]
+        size = randint(10, 1000)
+        arr = [randint(0, 10000) for _ in range(size)]
         arr = sorted(list(set(arr)))
         pivot = randint(0, len(arr))
 
